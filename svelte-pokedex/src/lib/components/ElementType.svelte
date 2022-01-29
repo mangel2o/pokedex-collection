@@ -2,7 +2,7 @@
 	export let element: { slot: number; type: CommonData };
 </script>
 
-<div class={`type ${element.type.name}`}>
+<div class="type {element.type.name}">
 	{element.type.name}
 </div>
 
