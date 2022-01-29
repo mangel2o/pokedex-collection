@@ -1,4 +1,5 @@
 import { FunctionComponent } from "react";
+import ElementType from "./ElementType";
 import PokemonDataRow from "./PokemonDataRow";
 
 interface PokemonInfoProps {
@@ -22,9 +23,7 @@ const PokemonInfo: FunctionComponent<PokemonInfoProps> = ({ pokemon }) => {
             </PokemonDataRow>
             <PokemonDataRow name="Type">
                {pokemon.types.map((element, index) => (
-                  <div key={index} >
-                     <span className={`type ${element.type.name}`}>{element.type.name}</span>
-                  </div>
+                  <ElementType key={index} element={element} />
                ))}
             </PokemonDataRow>
             <PokemonDataRow name="Species">

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import PokemonList from "../components/PokemonList";
 import SearchBar from "../components/SearchBar";
 import Stairs from "../components/Stairs";
@@ -20,9 +20,9 @@ const Home: FunctionComponent<HomeProps> = () => {
    }
 
    // * Refetchs whenever the user scrolls to the bottom of the page
-   function handleScrollToBottom() {
+   const handleScrollToBottom = () => {
       if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-         fetchNext();
+         fetchNext(data?.next!);
       }
    }
 
@@ -33,6 +33,10 @@ const Home: FunctionComponent<HomeProps> = () => {
             return { ...pokemon, index: index + 1 }
          })
          setPokemons(indexedData);
+         window.addEventListener("scroll", handleScrollToBottom)
+      }
+      return () => {
+         window.removeEventListener("scroll", handleScrollToBottom)
       }
    }, [data]);
 
@@ -44,15 +48,6 @@ const Home: FunctionComponent<HomeProps> = () => {
             pokemon.index === (+searchQuery)
       ))
    }, [pokemons, searchQuery]);
-
-
-   // * Adds event listener on scroll
-   useEffect(() => {
-      window.addEventListener("scroll", handleScrollToBottom)
-      return () => {
-         window.removeEventListener("scroll", handleScrollToBottom)
-      }
-   })
 
    return (
       <div className="home-container">

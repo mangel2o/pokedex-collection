@@ -1,26 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { onMount } from "svelte";
+import { get, writable } from "svelte/store";
 
 const cache = new Map<string, PokemonList>();
 
 const useFetchPokemons = (url: string) => {
-   const [data, setData] = useState<PokemonList>();
-   const [loading, setLoading] = useState<boolean>(true);
-   const [error, setError] = useState<Error>();
-   const mounted = useRef(false);
+   const data = writable<PokemonList>();
+   const loading = writable<boolean>(true);
+   const error = writable<Error>();
    const controller = new AbortController();
+   let mounted = false;
 
    const fetchInitial = () => {
       fetch(url, { signal: controller.signal })
          .then((res) => res.json())
          .then((fetchedData: PokemonList) => {
-            setData(fetchedData)
+            data.set(fetchedData)
             cache.set(url, fetchedData);
          })
          .catch((err: Error) => {
-            setError(err);
+            error.set(err);
          })
          .finally(() => {
-            setLoading(false);
+            loading.set(false);
          });
    }
 
@@ -28,35 +29,37 @@ const useFetchPokemons = (url: string) => {
       fetch(next, { signal: controller.signal })
          .then((res) => res.json())
          .then((fetchedData: PokemonList) => {
-            if (mounted.current) {
-               const newData = ({
-                  ...fetchedData,
-                  results: [...data?.results!, ...fetchedData.results]
-               });
-               setData(newData)
-               cache.set(url, newData);
+            if (mounted) {
+               data.update((previous) => {
+                  const newData = {
+                     ...fetchedData,
+                     results: [...previous.results, ...fetchedData.results]
+                  }
+                  cache.set(url, newData);
+                  return newData
+               })
             }
          })
          .catch((err: Error) => {
-            if (mounted.current) {
-               setError(err);
+            if (mounted) {
+               error.set(err);
             }
          })
    }
 
-   useEffect(() => {
-      mounted.current = true;
+   onMount(() => {
+      mounted = true;
       if (!cache.get(url)) {
          fetchInitial();
       } else {
-         setData(cache.get(url));
-         setLoading(false);
+         data.set(cache.get(url));
+         loading.set(false);
       }
       return () => {
-         mounted.current = false;
+         mounted = false;
          controller.abort();
       }
-   }, [])
+   })
 
    return { data, loading, error, fetchNext };
 }
