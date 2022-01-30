@@ -20,11 +20,11 @@ const Home: FunctionComponent<HomeProps> = () => {
    }
 
    // * Refetchs whenever the user scrolls to the bottom of the page
-   const handleScrollToBottom = () => {
+   const handleScrollToBottom = useCallback(() => {
       if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
          fetchNext(data?.next!);
       }
-   }
+   }, [data])
 
    // * Sets the pokemon data with indexed values
    useEffect(() => {
@@ -33,12 +33,16 @@ const Home: FunctionComponent<HomeProps> = () => {
             return { ...pokemon, index: index + 1 }
          })
          setPokemons(indexedData);
-         window.addEventListener("scroll", handleScrollToBottom)
       }
+   }, [data]);
+
+   // * Adds an event listener whenever the user scrolls to the bottom of the page
+   useEffect(() => {
+      window.addEventListener("scroll", handleScrollToBottom)
       return () => {
          window.removeEventListener("scroll", handleScrollToBottom)
       }
-   }, [data]);
+   }, [handleScrollToBottom]);
 
    // * Filters pokemons based on the search query
    useEffect(() => {

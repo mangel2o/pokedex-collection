@@ -14,7 +14,7 @@ body {
 }
 
 /** app */
-.app-layout{
+.app{
    display: flex;
    flex-flow: column;
 }

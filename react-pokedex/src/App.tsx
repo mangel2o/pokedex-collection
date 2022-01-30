@@ -8,19 +8,17 @@ import NavBar from './components/NavBar';
 
 function App() {
   return (
-    <Routes>
-      <div className="app-layout">
-        <NavBar />
-        <div className="content">
+    <div className="app">
+      <NavBar />
+      <div className="content">
+        <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="pokemon/:id" element={<Pokemon />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/pokemon/:id" element={<Pokemon />} />
           <Route path="*" element={<NotFound />} />
-        </div>
+        </Routes>
       </div>
-
-
-    </Routes>
+    </div>
   )
 }
 

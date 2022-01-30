@@ -8,7 +8,7 @@
 </script>
 
 <Router primary={false}>
-	<div class="app-layout">
+	<div class="app">
 		<NavBar />
 		<div class="content">
 			<Route path="/">
@@ -39,7 +39,7 @@
 		width: 100%;
 	}
 
-	.app-layout {
+	.app {
 		display: flex;
 		flex-flow: column;
 	}
