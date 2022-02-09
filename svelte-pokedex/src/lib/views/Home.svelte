@@ -8,6 +8,7 @@
 	const { data, loading, error, fetchNext } = useFetchPokemons(
 		"https://pokeapi.co/api/v2/pokemon"
 	);
+
 	let searchQuery = "";
 	$: pokemons =
 		$data &&

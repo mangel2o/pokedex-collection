@@ -2,6 +2,10 @@
 	const props = defineProps<{
 		searchQuery: string;
 	}>();
+
+	const emit = defineEmits<{
+		(e: "update:searchQuery", value: string): void;
+	}>();
 </script>
 
 <template>
@@ -9,7 +13,8 @@
 		<input
 			class="search-field"
 			type="text"
-			v-model="searchQuery"
+			:value="searchQuery"
+			@input="$emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
 			placeholder="Search Pokemon..."
 		/>
 		<button class="search-clear" @click="searchQuery = ''">Clear</button>

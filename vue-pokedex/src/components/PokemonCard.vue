@@ -6,7 +6,7 @@
 </script>
 
 <template>
-	<router-link :to="{ name: 'Pokemon', params: { id: props.pokemon.index } }">
+	<router-link :to="{ name: 'Pokemon', params: { id: props.pokemon.name } }">
 		<div class="pokemon-card">
 			<img
 				class="pokemon-card-sprite"

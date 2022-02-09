@@ -13,7 +13,6 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
-
   },
   {
     path: '/pokemon/:id',

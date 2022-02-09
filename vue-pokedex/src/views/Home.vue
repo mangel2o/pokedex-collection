@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { computed, onMounted } from "vue";
+	import { computed, onMounted, ref } from "vue";
 	import SearchBar from "../components/SearchBar.vue";
 	import Stairs from "../components/Stairs.vue";
 	import PokemonList from "../components/PokemonList.vue";
@@ -9,7 +9,7 @@
 		"https://pokeapi.co/api/v2/pokemon"
 	);
 
-	let searchQuery = "";
+	const searchQuery = ref("");
 	const pokemons = computed(() => {
 		return (
 			data.value &&
@@ -24,8 +24,8 @@
 			pokemons.value &&
 			pokemons.value.filter(
 				(pokemon) =>
-					pokemon.name.includes(searchQuery) ||
-					pokemon.index === +searchQuery
+					pokemon.name.includes(searchQuery.value) ||
+					pokemon.index === +searchQuery.value
 			)
 		);
 	});
