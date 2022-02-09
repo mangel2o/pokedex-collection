@@ -1,13 +1,12 @@
-import { onMount } from "svelte";
-import { writable } from "svelte/store";
+import { onMounted, ref } from "vue";
 
 // * Saves the data after fetching
 const cache = new Map<string, PokemonList>();
 
 const useFetchPokemons = (url: string) => {
-   const data = writable<PokemonList>();
-   const loading = writable<boolean>(true);
-   const error = writable<Error>();
+   const data = ref<PokemonList>();
+   const loading = ref<boolean>(true);
+   const error = ref<Error>();
    const controller = new AbortController();
    let mounted = false;
 
@@ -15,14 +14,14 @@ const useFetchPokemons = (url: string) => {
       fetch(url, { signal: controller.signal })
          .then((res) => res.json())
          .then((fetchedData: PokemonList) => {
-            data.set(fetchedData)
+            data.value = fetchedData
             cache.set(url, fetchedData);
          })
          .catch((err: Error) => {
-            error.set(err);
+            error.value = err;
          })
          .finally(() => {
-            loading.set(false);
+            loading.value = false;
          });
    }
 
@@ -31,30 +30,28 @@ const useFetchPokemons = (url: string) => {
          .then((res) => res.json())
          .then((fetchedData: PokemonList) => {
             if (mounted) {
-               data.update((previous) => {
-                  const newData = {
-                     ...fetchedData,
-                     results: [...previous.results, ...fetchedData.results]
-                  }
-                  cache.set(url, newData);
-                  return newData
-               })
+               const newData = {
+                  ...fetchedData,
+                  results: [...data.value!.results, ...fetchedData.results]
+               }
+               data.value = newData
+               cache.set(url, newData);
             }
          })
          .catch((err: Error) => {
             if (mounted) {
-               error.set(err);
+               error.value = err;
             }
          })
    }
 
-   onMount(() => {
+   onMounted(() => {
       mounted = true;
       if (!cache.get(url)) {
          fetchInitial();
       } else {
-         data.set(cache.get(url));
-         loading.set(false);
+         data.value = cache.get(url);
+         loading.value = false;
       }
       return () => {
          mounted = false;

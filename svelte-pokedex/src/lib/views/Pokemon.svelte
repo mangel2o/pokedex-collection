@@ -4,8 +4,7 @@
 	import Stairs from "../components/Stairs.svelte";
 	import useFetchPokemon from "../hooks/useFetchPokemon";
 
-	// your script goes here
-	let params = useParams();
+	const params = useParams();
 	const { data, loading, error } = useFetchPokemon(
 		`https://pokeapi.co/api/v2/pokemon/${$params.id}`
 	);

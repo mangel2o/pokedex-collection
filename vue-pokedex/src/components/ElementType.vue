@@ -1,15 +1,16 @@
-<script lang="ts">
-	export let element: {
-		slot: number;
-		type: CommonData;
-	};
+<script lang="ts" setup>
+	const props = defineProps<{
+		element: { slot: number; type: CommonData };
+	}>();
 </script>
 
-<div class="type {element.type.name}">
-	{element.type.name}
-</div>
+<template>
+	<div class="type" :class="props.element.type.name">
+		{{ element.type.name }}
+	</div>
+</template>
 
-<style>
+<style scoped>
 	.type {
 		display: inline-block;
 		width: 66px;
