@@ -5,6 +5,7 @@ import About from './views/About';
 import Pokemon from './views/Pokemon';
 import NotFound from './views/NotFound';
 import NavBar from './components/NavBar';
+import { useState } from 'react';
 
 function App() {
   return (
